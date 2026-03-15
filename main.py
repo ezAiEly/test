@@ -52,32 +52,32 @@ def run_normal_sort(algo_name, algo_func):
     print(f"原始列表：{original}")
     print(f"排序后：{sorted_numbers}\n")
 
-    def parse_interval(input_str):
-        """将用户输入的字符串（如'1s', '500ms', '1000'）解析为毫秒整数"""
-        input_str = input_str.strip().lower()
-        if not input_str:
-            return 500  # 默认
-        if input_str.endswith('s'):
-            # 秒为单位（例如 1s, 1.5s）
-            try:
-                seconds = float(input_str[:-1])
-                return int(seconds * 1000)
-            except ValueError:
-                pass
-        elif input_str.endswith('ms'):
-            # 毫秒为单位（例如 1000ms）
-            try:
-                return int(input_str[:-2])
-            except ValueError:
-                pass
-        else:
-            # 纯数字，当作毫秒
-            try:
-                return int(input_str)
-            except ValueError:
-                pass
-        print("输入无效，使用默认速度1000毫秒")
-        return 1000
+def parse_interval(input_str):
+    """将用户输入的字符串（如'1s', '500ms', '1000'）解析为毫秒整数"""
+    input_str = input_str.strip().lower()
+    if not input_str:
+        return 1000  # 默认改为1000毫秒，与提示一致
+    if input_str.endswith('s'):
+        # 秒为单位（例如 1s, 1.5s）
+        try:
+            seconds = float(input_str[:-1])
+            return int(seconds * 1000)
+        except ValueError:
+            pass
+    elif input_str.endswith('ms'):
+        # 毫秒为单位（例如 500ms）
+        try:
+            return int(input_str[:-2])
+        except ValueError:
+            pass
+    else:
+        # 纯数字，当作毫秒
+        try:
+            return int(input_str)
+        except ValueError:
+            pass
+    print("输入无效，使用默认速度1000毫秒")
+    return 1000
 
 def run_visualize_sort(algo_name, algo_func):
     numbers = get_numbers_from_input()
