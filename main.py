@@ -52,11 +52,38 @@ def run_normal_sort(algo_name, algo_func):
     print(f"原始列表：{original}")
     print(f"排序后：{sorted_numbers}\n")
 
+    def parse_interval(input_str):
+        """将用户输入的字符串（如'1s', '500ms', '1000'）解析为毫秒整数"""
+        input_str = input_str.strip().lower()
+        if not input_str:
+            return 500  # 默认
+        if input_str.endswith('s'):
+            # 秒为单位（例如 1s, 1.5s）
+            try:
+                seconds = float(input_str[:-1])
+                return int(seconds * 1000)
+            except ValueError:
+                pass
+        elif input_str.endswith('ms'):
+            # 毫秒为单位（例如 1000ms）
+            try:
+                return int(input_str[:-2])
+            except ValueError:
+                pass
+        else:
+            # 纯数字，当作毫秒
+            try:
+                return int(input_str)
+            except ValueError:
+                pass
+        print("输入无效，使用默认速度1000毫秒")
+        return 1000
+
 def run_visualize_sort(algo_name, algo_func):
     numbers = get_numbers_from_input()
-    speed = input("请输入动画速度（毫秒，例如500为半秒，直接回车默认500）：").strip()
-    interval = int(speed) if speed.isdigit() else 500
-    print(f"正在可视化 {algo_name}...")
+    speed_input = input("请输入动画速度（如 1s 表示1秒，1000ms 表示1000毫秒，直接回车默认1000毫秒）：").strip()
+    interval = parse_interval(speed_input)
+    print(f"正在可视化 {algo_name}，速度：{interval}毫秒...")
     sorted_result = visualize_sort(algo_func, numbers, interval=interval)
     print(f"排序完成，结果：{sorted_result}")
 

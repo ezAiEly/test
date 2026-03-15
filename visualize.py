@@ -37,11 +37,12 @@ def animate_sorting(snapshots, interval=1000):
     plt.show()
     return ani
 
-def visualize_sort(sort_func, arr):
+def visualize_sort(sort_func, arr, interval=1000):
     """
     通用可视化排序入口
-    :param sort_func: 已添加 callback 参数的排序函数（如 bubble_sort）
+    :param sort_func: 已添加 callback 参数的排序函数(如 bubble_sort, selection_sort, insertion_sort, quick_sort)
     :param arr: 待排序的原始列表
+    :param interval: 动画间隔时间（毫秒）
     :return: 排序后的列表
     """
     snapshots = []
@@ -61,7 +62,7 @@ def visualize_sort(sort_func, arr):
     sorted_result = sort_func(data, callback=record)
 
     # 播放动画
-    animate_sorting(snapshots)
+    animate_sorting(snapshots, interval=interval)
 
     # 返回排序结果（可能与 arr 不同，如果 sort_func 返回新列表）
     return sorted_result
