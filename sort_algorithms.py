@@ -48,18 +48,18 @@ def quick_sort(arr, callback=None):
             if callback:
                 callback(lst[:])  # 记录当前状态
             return lst
-    pivot = lst[len(lst) // 2]
-    left = [x for x in lst if x < pivot]
-    middle = [x for x in lst if x == pivot]
-    right = [x for x in lst if x > pivot]
-    # 递归排序子数组，并合并结果
-    sorted_left = _quick_sort(left)
-    sorted_right = _quick_sort(right)
-    result = sorted_left + middle + sorted_right
-    if callback:
-        callback(result[:])  # 记录合并后的结果
-    return result
-return _quick_sort(arr)  # 标记返回新列表
+        pivot = lst[len(lst) // 2]
+        left = [x for x in lst if x < pivot]
+        middle = [x for x in lst if x == pivot]
+        right = [x for x in lst if x > pivot]
+        # 递归排序子数组，并合并结果
+        sorted_left = _quick_sort(left)
+        sorted_right = _quick_sort(right)
+        result = sorted_left + middle + sorted_right
+        if callback:
+            callback(result[:])  # 记录合并后的结果
+        return result
+    return _quick_sort(arr)  # 标记返回新列表
 
 def gnome_sort(arr, callback=None):
     """侏儒排序（原地排序）"""
