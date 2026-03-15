@@ -4,7 +4,11 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import copy
 
-def animate_sorting(snapshots, interval=200):
+# 设置中文字体
+plt.rcParams['font.sans-serif'] = ['SimHei', 'Microsoft YaHei', 'DejaVu Sans']  # 用来正常显示中文标签
+plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
+
+def animate_sorting(snapshots, interval=1000):
     """播放排序动画"""
     if not snapshots:
         print("没有记录到任何步骤。")

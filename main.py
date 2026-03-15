@@ -53,10 +53,11 @@ def run_normal_sort(algo_name, algo_func):
     print(f"排序后：{sorted_numbers}\n")
 
 def run_visualize_sort(algo_name, algo_func):
-    """运行可视化排序"""
     numbers = get_numbers_from_input()
+    speed = input("请输入动画速度（毫秒，例如500为半秒，直接回车默认500）：").strip()
+    interval = int(speed) if speed.isdigit() else 500
     print(f"正在可视化 {algo_name}...")
-    sorted_result = visualize_sort(algo_func, numbers)
+    sorted_result = visualize_sort(algo_func, numbers, interval=interval)
     print(f"排序完成，结果：{sorted_result}")
 
 def main():
