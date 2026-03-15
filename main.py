@@ -2,34 +2,26 @@
 
 import sys
 import inspect
-import sort_algorithms  # 导入模块
+import sort_algorithms
 from visualize import visualize_sort
 
-#def is_sort_function(obj):
-    #"""判断对象是否为排序函数（以 '_sort' 结尾的函数）"""
-    #return inspect.isfunction(obj) and obj.__name__.endswith('_sort')
-
 def collect_algorithms(module):
-    """从模块中自动收集所有排序函数，返回列表，每个元素为 (显示名称, 函数, 是否返回新列表)"""
+    """
+    从模块中自动收集所有以 '_sort' 结尾的函数。
+    返回列表，每个元素为 (显示名称, 函数对象)
+    """
     algorithms = []
     for name, func in inspect.getmembers(module, inspect.isfunction):
         if name.endswith('_sort'):
-            # 将下划线替换为空格，并首字母大写
+            # 生成友好的显示名称：将下划线替换为空格，并首字母大写
             display_name = name.replace('_', ' ').title()
-            # 获取 returns_new 属性，默认为 False
-            returns_new = getattr(func, 'returns_new', False)
-            algorithms.append((display_name, func, returns_new))
-    # 可以按名称排序，使菜单顺序固定
+            algorithms.append((display_name, func))
+    # 按显示名称排序，使菜单顺序固定
     algorithms.sort(key=lambda x: x[0])
     return algorithms
 
-#def print_menu(algorithms):
-    #print("\n请选择排序算法：")
-    #for i, (name, _, _) in enumerate(algorithms, start=1):
-        #print(f"{i}. {name}")
-    #print("0. 退出")
-
 def get_numbers_from_input():
+    """获取用户输入的数字列表"""
     while True:
         try:
             numbers_str = input("请输入要排序的数字（用空格分隔）：")
@@ -68,15 +60,23 @@ def run_visualize_sort(algo_name, algo_func):
     print(f"排序完成，结果：{sorted_result}")
 
 def main():
-    # 自动收集算法
+    # 自动收集所有排序算法
     algorithms = collect_algorithms(sort_algorithms)
     if not algorithms:
         print("错误：未找到任何排序函数（函数名应以 '_sort' 结尾）。")
         return
 
     while True:
+        # 打印主菜单
         print("\n请选择操作：")
-        for i, (name, _) in enumerate(algorithms, start=1):
+        # 使用更安全的解包方式：每个算法信息可以包含任意多个元素，我们只取前两个
+        for i, algo_info in enumerate(algorithms, start=1):
+            # 假设 algo_info 的第一个元素是名称，第二个是函数
+            if isinstance(algo_info, (tuple, list)) and len(algo_info) >= 2:
+                name = algo_info[0]
+            else:
+                # 如果格式不对，直接使用字符串表示
+                name = str(algo_info)
             print(f"{i}. 普通排序 - {name}")
         print(f"{len(algorithms) + 1}. 可视化排序")
         print("0. 退出")
@@ -95,13 +95,23 @@ def main():
 
         if 1 <= choice <= len(algorithms):
             # 普通排序
-            algo_name, algo_func = algorithms[choice - 1]
+            algo_info = algorithms[choice - 1]
+            # 安全获取名称和函数
+            if isinstance(algo_info, (tuple, list)) and len(algo_info) >= 2:
+                algo_name, algo_func = algo_info[0], algo_info[1]
+            else:
+                print("算法信息格式错误，请检查 collect_algorithms 返回值。")
+                continue
             run_normal_sort(algo_name, algo_func)
 
         elif choice == len(algorithms) + 1:
             # 可视化排序：先选择具体算法
             print("\n请选择要可视化的算法：")
-            for i, (name, _) in enumerate(algorithms, start=1):
+            for i, algo_info in enumerate(algorithms, start=1):
+                if isinstance(algo_info, (tuple, list)) and len(algo_info) >= 2:
+                    name = algo_info[0]
+                else:
+                    name = str(algo_info)
                 print(f"{i}. {name}")
             sub_choice = input("请输入算法编号：").strip()
             if not sub_choice.isdigit():
@@ -109,14 +119,18 @@ def main():
                 continue
             sub_choice = int(sub_choice)
             if 1 <= sub_choice <= len(algorithms):
-                algo_name, algo_func = algorithms[sub_choice - 1]
+                algo_info = algorithms[sub_choice - 1]
+                if isinstance(algo_info, (tuple, list)) and len(algo_info) >= 2:
+                    algo_name, algo_func = algo_info[0], algo_info[1]
+                else:
+                    print("算法信息格式错误。")
+                    continue
                 run_visualize_sort(algo_name, algo_func)
             else:
                 print("无效选择。")
 
         else:
             print(f"无效选择，请输入 1-{len(algorithms) + 1} 之间的数字。")
-
 
 if __name__ == "__main__":
     main()
